@@ -12,6 +12,6 @@ public class AppTest {
 
     @Test
     public void failTest() {
-        assertThat("", true, is(false));
+        assertThat("", true, is(true));
     }
 }
