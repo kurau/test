@@ -1,6 +1,8 @@
 package io.github.kurau;
 
+import io.qameta.allure.Step;
 import org.junit.rules.ExternalResource;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -8,6 +10,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.URL;
+import java.util.GregorianCalendar;
 
 import static org.openqa.selenium.chrome.ChromeOptions.CAPABILITY;
 import static org.openqa.selenium.remote.CapabilityType.ForSeleniumServer.ENSURING_CLEAN_SESSION;
@@ -54,6 +57,19 @@ public class WdRule extends ExternalResource {
         capabilities.setCapability(CAPABILITY, chromeOptions);
 
         return capabilities;
+    }
+
+    @Step("Выставляем куку: name={cookieName}, value={cookieValue}, domain={cookieDomain}")
+    public void setCookie(String cookieName, String cookieValue, String cookieDomain) {
+        Cookie cookie = driver().manage().getCookieNamed(cookieName);
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.add(GregorianCalendar.YEAR, 10);
+        Cookie newCookie = new Cookie(cookieName, cookieValue, cookieDomain, "/",
+                calendar.getTime());
+        if (cookie != null) {
+            driver().manage().deleteCookieNamed(cookieName);
+        }
+        driver().manage().addCookie(newCookie);
     }
 
     public WebDriver driver() {
