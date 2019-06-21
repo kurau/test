@@ -33,6 +33,9 @@ public class WdTest {
                 {"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"},
                 {"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"},
                 {"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"},
+                {"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"},
+                {"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"},
+                {"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"},
                 {"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"},{"1"}
         });
     }
@@ -52,7 +55,11 @@ public class WdTest {
     @DisplayName("open")
     public void openTest() {
         long start = System.currentTimeMillis();
-        wdRule.driver().get("https://realty.test.vertis.yandex.ru/sankt-peterburg/");
+        wdRule.driver().get("https://realty.test.vertis.yandex.ru/sankt-peterburg/kupit/kvartira/");
         log.info(" # " + (System.currentTimeMillis() - start));
+        long start2 = System.currentTimeMillis();
+        wdRule.driver().getCurrentUrl();
+        log.info(" ## " + (System.currentTimeMillis() - start2));
+        wdRule.saveScreenShot("123");
     }
 }

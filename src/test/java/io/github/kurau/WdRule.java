@@ -1,5 +1,6 @@
 package io.github.kurau;
 
+import io.qameta.allure.Attachment;
 import io.qameta.allure.Step;
 import org.junit.rules.ExternalResource;
 import org.openqa.selenium.Cookie;
@@ -8,7 +9,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import ru.yandex.qatools.ashot.AShot;
+import ru.yandex.qatools.ashot.Screenshot;
+import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 
+import javax.imageio.ImageIO;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.util.GregorianCalendar;
 
@@ -70,6 +77,24 @@ public class WdRule extends ExternalResource {
             driver().manage().deleteCookieNamed(cookieName);
         }
         driver().manage().addCookie(newCookie);
+    }
+
+    @Attachment(value = "{description}", type = "image/png")
+    @Step
+    public byte[] saveScreenShot(String description) {
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            ImageIO.write(getScreenShotFile().getImage(), "jpg", baos);
+            baos.flush();
+            return baos.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new byte[0];
+        }
+    }
+
+    private Screenshot getScreenShotFile() {
+        return new AShot().shootingStrategy(ShootingStrategies.viewportPasting(100))
+                .takeScreenshot(webDriver);
     }
 
     public WebDriver driver() {
